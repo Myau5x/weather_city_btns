@@ -37,6 +37,34 @@ function get_weather(city){
     }).done(function(response){
       console.log("future and uv info")
       console.log(response);
+      $("#current").empty()
+      let temp = $("<p>");
+      let humi = $("<p>");
+      let wind = $("<p>");
+      let uvi = $("<p>");
+      temp.text("Temperature: "+response.current.temp);
+      humi.text("Humidity: "+response.current.humidity);
+      wind.text("Wind speed: "+response.current.wind_speed);
+      uvi.text("UV index: "+response.current.uvi);
+      $("#current").append(temp,humi,wind,uvi);
+      ///future
+      let fEl = $("#future")
+      fEl.empty();
+      for(i =1;i<6;i++){
+        let colEl = $("<div>");
+        colEl.addClass("col col-2 mr-3");
+        let day = response.daily[i]
+        let tempF = $("<p>");
+        let humiF = $("<p>");
+        let iconF = $("<img>");
+        iconF.attr("src","http://openweathermap.org/img/wn/"+day.weather[0].icon+"@2x.png" );
+        tempF.text("Temp: "+day.temp.day);
+        humiF.text("Humidity: "+day.humidity)
+        colEl.append(iconF, tempF, humiF);
+        fEl.append(colEl);
+
+
+      }
     });
   }
      
