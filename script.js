@@ -27,9 +27,15 @@ function get_weather(city){
   }).done(function(response) {
       
     console.log(response);
-    $("#city-name").text(response.name);
-    lat = response.coord.lat;
-    lon = response.coord.lon;
+    let dt = new Date(response.dt*1000);
+    //let x = dt.toDateString();
+    //console.log(x);
+    $("#city-name").text(response.name+" ("+dt.toLocaleDateString()+")");
+    let icon = $("<img>");
+    icon.attr("src","http://openweathermap.org/img/wn/"+response.weather[0].icon+"@2x.png" );
+    $("#city-name").append(icon);
+    let lat = response.coord.lat;
+    let lon = response.coord.lon;
     let query = "https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&exclude=minutely,alerts,hourly&units=imperial&appid="+APIKey;
     $.ajax({
       url: query,
@@ -52,15 +58,17 @@ function get_weather(city){
       fEl.empty();
       for(i =1;i<6;i++){
         let colEl = $("<div>");
-        colEl.addClass("col col-2 mr-3");
+        colEl.addClass("col col-2 mr-4 ml-1");
         let day = response.daily[i]
         let tempF = $("<p>");
         let humiF = $("<p>");
         let iconF = $("<img>");
-        iconF.attr("src","http://openweathermap.org/img/wn/"+day.weather[0].icon+"@2x.png" );
+        let dtF = $("<h5>");
+        dtF.text(day.dt);
+        iconF.attr("src","http://openweathermap.org/img/wn/"+day.weather[0].icon+".png" ); ///@2x.png twice more
         tempF.text("Temp: "+day.temp.day);
         humiF.text("Humidity: "+day.humidity)
-        colEl.append(iconF, tempF, humiF);
+        colEl.append(dtF,iconF, tempF, humiF);
         fEl.append(colEl);
 
 
