@@ -64,7 +64,8 @@ function get_weather(city){
         let humiF = $("<p>");
         let iconF = $("<img>");
         let dtF = $("<h5>");
-        dtF.text(day.dt);
+        let fdt = new Date(day.dt*1000);
+        dtF.text(fdt.toLocaleDateString());
         iconF.attr("src","http://openweathermap.org/img/wn/"+day.weather[0].icon+".png" ); ///@2x.png twice more
         tempF.text("Temp: "+day.temp.day);
         humiF.text("Humidity: "+day.humidity)
