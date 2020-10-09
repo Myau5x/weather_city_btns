@@ -2,23 +2,21 @@ let curEl = $("#current");
 let futureEl = $("#future")
 
 let APIKey = '5a50fdd6105c320cc22546ab9a405fcf';
-let queryURL_cur = "https://api.openweathermap.org/data/2.5/weather?q=seattle&units=imperial&appid=" + APIKey;
+////later I save it in local storage
+last_city  = "";
+cities = []
+function render_cities(){
+  let place = $("#cities-place");
+  place.empty();
+  for (i =0; i< cities.length; i++){
+    let row = $("<div>");
+    row.addClass("row py-3 px-4 border cities");
+    row.attr("data-city", cities[i]);
+    row.text(cities[i].toUpperCase());
+    place.append(row);   
+  }
+}
 
-//seattle coor -122.33, lat: 47.61
-let queryURL_fut = "https://api.openweathermap.org/data/2.5/onecall?lat=47.61&lon=-122.33&exclude=minutely,alerts,hourly&units=imperial&appid="+APIKey;
-
-
-//// check how answer to unknown  --- 404
-let queryURL_wr = "https://api.openweathermap.org/data/2.5/weather?q=vrbrvr&units=imperial&appid=" + APIKey;
-$.ajax({
-    url: queryURL_wr,
-    method: "GET"
-    }).done(function(response) {
-      
-      console.log(response)}
-       
-    ).fail(function(error){console.log(error)});
-    
 function get_weather(city){
   query_city = 'https://api.openweathermap.org/data/2.5/weather?q='+city+'&units=imperial&appid='+APIKey;
   $.ajax({
@@ -79,15 +77,25 @@ function get_weather(city){
      
   ).fail(function(response){console.log(response)});
 }
-  
+
+function cityWeather(){
+  var city_name = $(this).attr("data-city");
+  get_weather(city_name);
+}
 
 $('#search').on("click",function(){
   console.log('button search clicked');
-  let city = $("#city").val().trim();
+  let city = $("#city").val().trim().toLowerCase();
   get_weather(city);
-
+  if (!cities.includes(city)){
+    console.log(cities);
+    cities.push(city);
+  }
+  render_cities();
   //add button to get weather
 });
+
+$(document).on("click", ".cities", cityWeather);
   /*
   ```
 GIVEN a weather dashboard with form inputs
