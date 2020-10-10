@@ -62,9 +62,9 @@ function get_weather(city){
       let humi = $("<p>");
       let wind = $("<p>");
       let uvi = $("<p>");
-      temp.text("Temperature: "+response.current.temp);
-      humi.text("Humidity: "+response.current.humidity);
-      wind.text("Wind speed: "+response.current.wind_speed);
+      temp.text("Temperature: "+response.current.temp + "°F");
+      humi.text("Humidity: "+response.current.humidity + "%");
+      wind.text("Wind speed: "+response.current.wind_speed + " MPH");
       uviValue = parseFloat(response.current.uvi)
       uvi.text("UV index: ");
       let uvSpan = $("<span>");
@@ -100,8 +100,8 @@ function get_weather(city){
         let fdt = new Date(day.dt*1000);
         dtF.text(fdt.toLocaleDateString());
         iconF.attr("src","http://openweathermap.org/img/wn/"+day.weather[0].icon+".png" ); ///@2x.png twice more
-        tempF.text("Temp: "+day.temp.day);
-        humiF.text("Humidity: "+day.humidity)
+        tempF.text("Temp: "+day.temp.day + "°F");
+        humiF.text("Humidity: "+day.humidity+"%");
         colEl.append(dtF,iconF, tempF, humiF);
         fEl.append(colEl);
 
