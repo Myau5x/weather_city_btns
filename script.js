@@ -3,19 +3,35 @@ let futureEl = $("#future")
 
 let APIKey = '5a50fdd6105c320cc22546ab9a405fcf';
 ////later I save it in local storage
-last_city  = "";
-cities = []
+//last_city  = "";
+let last_city = localStorage.getItem("last_city");
+    
+    if(!last_city){ last_city = ''}
+    else{
+      get_weather(last_city);
+    }
+
+
+
+
 function render_cities(){
   let place = $("#cities-place");
   place.empty();
   for (i =0; i< cities.length; i++){
     let row = $("<div>");
-    row.addClass("row py-3 px-4 border cities");
+    row.addClass("row py-3 px-4 border-bottom cities");
     row.attr("data-city", cities[i]);
     row.text(cities[i].toUpperCase());
     place.append(row);   
   }
 }
+
+let cities = JSON.parse(localStorage.getItem("cities"));
+if (!cities){cities = []}
+else{
+  render_cities()
+}
+
 
 function get_weather(city){
   query_city = 'https://api.openweathermap.org/data/2.5/weather?q='+city+'&units=imperial&appid='+APIKey;
@@ -49,14 +65,33 @@ function get_weather(city){
       temp.text("Temperature: "+response.current.temp);
       humi.text("Humidity: "+response.current.humidity);
       wind.text("Wind speed: "+response.current.wind_speed);
-      uvi.text("UV index: "+response.current.uvi);
+      uviValue = parseFloat(response.current.uvi)
+      uvi.text("UV index: ");
+      let uvSpan = $("<span>");
+      uvSpan.text(uviValue);
+      if (uviValue<3){
+        uvSpan.addClass("green");
+      }
+      else if (uviValue<6){
+        uvSpan.addClass("yellow");
+      }
+      else if (uviValue<8){
+        uvSpan.addClass("orange");
+      }
+      else if (uviValue<11){
+        uvSpan.addClass("red");
+      }
+      else{
+        uvSpan.addClass("violet");
+      }
+      uvi.append(uvSpan);
       $("#current").append(temp,humi,wind,uvi);
       ///future
       let fEl = $("#future")
       fEl.empty();
       for(i =1;i<6;i++){
         let colEl = $("<div>");
-        colEl.addClass("col col-2 mr-4 ml-1");
+        colEl.addClass("col-md-2 mr-4 ml-1 my-1");
         let day = response.daily[i]
         let tempF = $("<p>");
         let humiF = $("<p>");
@@ -75,21 +110,28 @@ function get_weather(city){
     });
   }
      
-  ).fail(function(response){console.log(response)});
+  ).fail(function(response){
+    $("#city-name").text(response.responseJSON.message)
+    $("#current").empty();
+    $("#future").empty();
+    console.log(response)});
 }
 
 function cityWeather(){
   var city_name = $(this).attr("data-city");
   get_weather(city_name);
+  localStorage.setItem("last_city",city_name);
 }
 
 $('#search').on("click",function(){
   console.log('button search clicked');
   let city = $("#city").val().trim().toLowerCase();
+  localStorage.setItem("last_city",city);
   get_weather(city);
   if (!cities.includes(city)){
     console.log(cities);
     cities.push(city);
+    localStorage.setItem("cities",JSON.stringify(cities));
   }
   render_cities();
   //add button to get weather

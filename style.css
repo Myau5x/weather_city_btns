@@ -1,4 +1,25 @@
-.col-2{
+.col-md-2{
     background-color: #0069d9;
     color: white;
+}
+
+.green{
+    background-color: green;
+}
+
+.yellow{
+    background-color: yellow;
+}
+
+.orange{
+    background-color: orange;
+
+}
+
+.red{
+    background-color: red;
+}
+
+.violet{
+    background-color: purple;
 }
