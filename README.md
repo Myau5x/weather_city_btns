@@ -14,6 +14,21 @@ The site shows current weather and forecast in the chosen city.
 
 ### How it work?
 
+User search for city. 
+
+Then website send API request to openweathermap.org and grab weather and location for that city, and sent another request to find forecast for that location.
+
+Temperature, humidity, wind speed, weahter icon and UV index are shown for current weather.
+
+UV index is shown in different color depends on value (less than 3 &ndash green, 3-5 &ndash yellow, 6-7 &ndash orange, greater than 8 &ndash red)
+
+Temperature, humidity and weather icon are shown for 5-day forecast.
+
+All search city are added in history (browser local storage).
+
+If user clicked on city in search history then he will see weather and forecast for that city.
+
+If user comes to website again then he will see weather for last searched city and search history.
 
 
 
